@@ -1,6 +1,7 @@
 const {
   createRecipeService,
   listRecipesService,
+  findRecipeByIdService,
 } = require('../service/recipeService');
 const { CREATED, OK } = require('../utils/statusHttp');
 
@@ -30,7 +31,18 @@ const listRecipesController = async (req, res, next) => {
   }
 };
 
+const findRecipeByIdController = async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const recipe = await findRecipeByIdService(id);
+      return res.status(OK).json(recipe);
+    } catch (error) {
+      return next(error);
+    }
+  };
+
 module.exports = {
   createRecipeController,
   listRecipesController,
+  findRecipeByIdController,
 };

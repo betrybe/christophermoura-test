@@ -2,6 +2,7 @@ const { newError } = require('../utils/newError');
 const {
     createRecipeModel,
     listRecipes,
+    findRecipeById,
 } = require('../model/recipesModel');
 const { recipeSchema } = require('./joiSchemas');
 const dictErr = require('../dictionaryError');
@@ -19,7 +20,14 @@ const listRecipesService = async () => {
     return recipes;
 };
 
+const findRecipeByIdService = async (recipeId) => {
+    const recipe = await findRecipeById(recipeId);
+    if (!recipe) return newError(dictErr.recipeNotFound());
+    return recipe;
+};
+
 module.exports = {
     createRecipeService,
     listRecipesService,
+    findRecipeByIdService,
 };
