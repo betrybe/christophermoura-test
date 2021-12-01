@@ -7,7 +7,6 @@ const {
     deleteRecipeController,
     addImgController,
 } = require('../recipeController');
-
 const { validateToken } = require('../../middlware/validateToken');
 
 const router = express.Router();
