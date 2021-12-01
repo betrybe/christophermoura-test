@@ -3,6 +3,7 @@ const {
     createRecipeModel,
     listRecipes,
     findRecipeById,
+    updateRecipe,
 } = require('../model/recipesModel');
 const { recipeSchema } = require('./joiSchemas');
 const dictErr = require('../dictionaryError');
@@ -26,8 +27,26 @@ const findRecipeByIdService = async (recipeId) => {
     return recipe;
 };
 
+const canChangeRecipe = (role, userId, recipe) => {
+    if (role === 'admin') return true;
+    if (JSON.stringify(recipe.userId) === JSON.stringify(userId)) return true;
+    return false;
+};
+
+const updateRecipeService = async (recipeData, userId, role) => {
+    const { ingredients, name, preparation, recipeId } = recipeData;
+    const oldRecipe = await findRecipeById(recipeId);
+
+    if (!canChangeRecipe(role, userId, oldRecipe)) return newError(dictErr.missingAuthToken());
+
+    await updateRecipe(name, ingredients, preparation, recipeId);
+    const recipeUpdated = await findRecipeById(recipeId);
+    return recipeUpdated;
+};
+
 module.exports = {
     createRecipeService,
     listRecipesService,
     findRecipeByIdService,
+    updateRecipeService,
 };

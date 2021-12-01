@@ -3,6 +3,7 @@ const {
     createRecipeController,
     listRecipesController,
     findRecipeByIdController,
+    updateRecipeController,
 } = require('../recipeController');
 
 const { validateToken } = require('../../middlware/validateToken');
@@ -13,5 +14,7 @@ router.get('/', listRecipesController);
 router.get('/:id', findRecipeByIdController);
 
 router.post('/', validateToken, createRecipeController);
+
+router.put('/:id', validateToken, updateRecipeController);
 
 module.exports = { router };
