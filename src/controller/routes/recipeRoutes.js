@@ -4,6 +4,8 @@ const {
     listRecipesController,
     findRecipeByIdController,
     updateRecipeController,
+    deleteRecipeController,
+    addImgController,
 } = require('../recipeController');
 
 const { validateToken } = require('../../middlware/validateToken');
@@ -15,6 +17,9 @@ router.get('/:id', findRecipeByIdController);
 
 router.post('/', validateToken, createRecipeController);
 
+router.put('/:id/image', validateToken, addImgController);
 router.put('/:id', validateToken, updateRecipeController);
+
+router.delete('/:id', validateToken, deleteRecipeController);
 
 module.exports = { router };

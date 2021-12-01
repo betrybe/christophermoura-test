@@ -4,6 +4,8 @@ const {
     listRecipes,
     findRecipeById,
     updateRecipe,
+    deleteRecipe,
+    addURLImg,
 } = require('../model/recipesModel');
 const { recipeSchema } = require('./joiSchemas');
 const dictErr = require('../dictionaryError');
@@ -44,9 +46,32 @@ const updateRecipeService = async (recipeData, userId, role) => {
     return recipeUpdated;
 };
 
+const deleteRecipeService = async (role, userId, recipeId) => {
+    const oldRecipe = await findRecipeById(recipeId);
+
+    if (!canChangeRecipe(role, userId, oldRecipe)) return newError(dictErr.missingAuthToken());
+
+    await deleteRecipe(recipeId);
+    return oldRecipe;
+};
+
+const addURLImgService = async (recipeId, path, role, userId) => {
+    const oldRecipe = await findRecipeById(recipeId);
+
+    if (!canChangeRecipe(role, userId, oldRecipe)) return newError(dictErr.missingAuthToken());
+
+    const urlImg = `localhost:3000/${path}`;
+    await addURLImg(recipeId, urlImg);
+    
+    const recipeUpdated = await findRecipeById(recipeId);
+    return recipeUpdated;
+};
+
 module.exports = {
     createRecipeService,
     listRecipesService,
     findRecipeByIdService,
     updateRecipeService,
+    deleteRecipeService,
+    addURLImgService,
 };
