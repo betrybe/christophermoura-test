@@ -34,7 +34,14 @@ const loginService = async (email, password) => {
   return token;
 };
 
+const createAdminService = async (currentRole, newUser) => {
+  if (currentRole !== 'admin') return newError(dictErr.onlyAdmins());
+  const adminCreated = await createUser(newUser);
+  return adminCreated;
+};
+
 module.exports = {
   createUserService,
   loginService,
+  createAdminService,
 };
